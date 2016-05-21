@@ -10,6 +10,7 @@
     tools:context="com.anuradhawick.microcontroller.ControlPage">
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_alignParentLeft="true"
@@ -24,10 +25,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:layout_weight="10"
+            android:indeterminate="false"
             android:max="100"
             android:progress="50"
-            android:rotation="180"
-            android:indeterminate="false" />
+            android:rotation="180" />
 
         <ImageView
             android:id="@+id/wheel"
@@ -45,37 +46,65 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:layout_weight="10"
+            android:indeterminate="false"
             android:max="100"
-            android:progress="70"
-            android:indeterminate="false" />
+            android:progress="70" />
     </LinearLayout>
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Large Text"
         android:id="@+id/textView"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
-
-    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         android:text="Large Text"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
         android:id="@+id/textView2"
-        android:layout_centerVertical="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:text="Large Text"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
         android:id="@+id/textView3"
-        android:layout_alignTop="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignTop="@+id/textView"
+        android:text="Large Text"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_below="@+id/linearLayout"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_above="@+id/textView">
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="100dp"
+            android:id="@+id/imageView"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:src="@drawable/brake"
+            android:maxWidth="10dp"/>
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="100dp"
+            android:id="@+id/imageView2"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:src="@drawable/gas"/>
+    </LinearLayout>
+
 </RelativeLayout>

@@ -46,10 +46,6 @@ public class ControlPage extends AppCompatActivity implements SensorEventListene
             // Convert the rotation-vector to a 4x4 matrix.
             SensorManager.getRotationMatrixFromVector(mRotationMatrix,
                     event.values);
-//            SensorManager
-//                    .remapCoordinateSystem(mRotationMatrix,
-//                            SensorManager.AXIS_X, SensorManager.AXIS_Z,
-//                            mRotationMatrix);
             SensorManager.getOrientation(mRotationMatrix, orientationVals);
 
             // Optionally convert the result from radians to degrees
