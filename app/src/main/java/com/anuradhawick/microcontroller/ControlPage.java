@@ -27,6 +27,13 @@ public class ControlPage extends AppCompatActivity implements SensorEventListene
     private float[] orientationVals = new float[4];
     private SeekBar speedSelector;
 
+    // Static variables
+    // Keeping track of the pressed item
+    private static long gasPress = System.currentTimeMillis();
+    private static long brakePress = System.currentTimeMillis();
+    // Speeds
+    private int inclination = 0, direction = 1, speed = 0, turn = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,11 +49,25 @@ public class ControlPage extends AppCompatActivity implements SensorEventListene
         brake.setOnTouchListener(this);
 
         if (sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR) != null) {
-            sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR), sensorManager.SENSOR_DELAY_NORMAL);
+            sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR), sensorManager.SENSOR_DELAY_UI);
             Toast.makeText(this, "Success", Toast.LENGTH_LONG);
         } else {
             Toast.makeText(this, "Failed", Toast.LENGTH_LONG);
         }
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (true) {
+                    HomePage.calculator.updateSpeed(direction, speed, inclination, turn);
+                    try {
+                        Thread.sleep(50);
+                    } catch (InterruptedException e) {
+                        //
+                    }
+                }
+            }
+        }).start();
 
     }
 
@@ -72,15 +93,15 @@ public class ControlPage extends AppCompatActivity implements SensorEventListene
                 leftTurnValue = (Math.round(orientationVals[1] / 45 * 100) - 15);
                 rightTurnValue = ((-1) * (Math.round(orientationVals[1] / 45 * 100)) - 15);
                 if (leftTurnValue > 0) {
-                    leftTurnValue = Math.min(leftTurnValue, 100);
-                    leftTurnValue = (int) ((float) leftTurnValue / 100.0 * (255));
+                    leftTurnValue = Math.min(leftTurnValue, 999);
+                    leftTurnValue = (int) ((float) leftTurnValue / 100.0 * (999));
                     rightTurnValue = 0;
                     // Turn left
                     turn = 2;
                     inclination = leftTurnValue;
                 } else if (rightTurnValue > 0) {
-                    rightTurnValue = Math.min(rightTurnValue, 100);
-                    rightTurnValue = (int) ((float) rightTurnValue / 100.0 * (255));
+                    rightTurnValue = Math.min(rightTurnValue, 999);
+                    rightTurnValue = (int) ((float) rightTurnValue / 100.0 * (999));
                     leftTurnValue = 0;
                     // Right turn
                     turn = 1;
@@ -90,7 +111,6 @@ public class ControlPage extends AppCompatActivity implements SensorEventListene
                 wheel.setRotation(0f);
                 inclination = 0;
             }
-            HomePage.calculator.updateSpeed(direction, speed, inclination, turn);
         }
     }
 
@@ -104,12 +124,6 @@ public class ControlPage extends AppCompatActivity implements SensorEventListene
 
     }
 
-    // Keeping track of the pressed item
-    private static long gasPress = System.currentTimeMillis();
-    private static long brakePress = System.currentTimeMillis();
-    // Speeds
-    private int inclination = 0, direction = 1, speed = 0, turn = 1;
-
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         if (v.getId() == R.id.gas) {
@@ -122,7 +136,6 @@ public class ControlPage extends AppCompatActivity implements SensorEventListene
                 direction = 1;
                 speed = 0;
                 turn = 1;
-                HomePage.calculator.updateSpeed(direction, speed, inclination, turn);
             }
         }
         if (v.getId() == R.id.brake) {
@@ -136,8 +149,6 @@ public class ControlPage extends AppCompatActivity implements SensorEventListene
                     direction = 1;
                     speed = 0;
                     turn = 1;
-                    HomePage.calculator.updateSpeed(direction, speed, inclination, turn);
-//                    calc.sendData();
                 }
             }
         }

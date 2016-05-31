@@ -30,8 +30,8 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
         Button proceedButton = (Button) findViewById(R.id.proceedButton);
         portNumber = (EditText) findViewById(R.id.portNumber);
         ipAddress = (EditText) findViewById(R.id.ipAddress);
-        ipAddress.setText("192.168.137.198");
-        portNumber.setText("7500");
+        ipAddress.setText("192.168.137.243");
+        portNumber.setText("80");
         proceedButton.setOnClickListener(this);
         calculator.updateSpeed(1, 0, 0, 1);
     }

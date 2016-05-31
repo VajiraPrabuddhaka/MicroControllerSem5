@@ -62,7 +62,7 @@
             android:layout_height="wrap_content"
             android:minHeight="10dp"
             android:layout_marginTop="10dp"
-            android:max="255"
+            android:max="999"
             android:progress="0"
             android:indeterminate="false"
             android:id="@+id/speedSelector" />

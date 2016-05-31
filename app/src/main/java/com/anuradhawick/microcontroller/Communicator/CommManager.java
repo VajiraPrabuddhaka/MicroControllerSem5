@@ -6,6 +6,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.sql.SQLOutput;
 
 /**
  * Created by anuradhawick on 5/24/16.
@@ -59,24 +60,31 @@ public class CommManager {
         public void sendMessage(String message) {
             try {
 //                dataOutputStream.write((message + "\r\n").getBytes());
-                dataOutputStream.write(message.getBytes());
+                dataOutputStream.write((message + "\r").getBytes());
+                dataOutputStream.flush();
             } catch (Exception e) {
-                //
+                e.printStackTrace();
             }
         }
 
         @Override
         public void run() {
             while (true) try {
-//                byte[] temp = new byte[10];
-                sendMessage(calculator.getMessage());
-//                dataInputStream.read(temp, 0, 10);
-//                String s = new String(temp);
-//                System.out.println(s.split("[\r\n]")[0]);
-                System.out.println(dataInputStream.readUTF());
-                sleep(300);
+                byte[] temp = new byte[10];
+//                String ss = calculator.getMessage();
+//                sendMessage(ss);
+//                System.out.print(calculator.getMessage() +" _ ");
+                System.out.println("Sending");
+                dataOutputStream.write((calculator.getMessage().trim() + "\r").getBytes());
+                System.out.println("Receiving");
+                dataInputStream.read(temp, 0, 10);
+                String s = new String(temp);
+                System.out.println("Looping");
+                System.out.println("Received: "+s);
+//                System.out.println(dataInputStream.read());
+                sleep(200);
             } catch (Exception e) {
-                //
+                e.printStackTrace();
             }
         }
     }

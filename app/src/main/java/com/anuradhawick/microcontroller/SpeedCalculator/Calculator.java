@@ -27,11 +27,11 @@ public class Calculator {
             }
             switch (turn) {
                 case 1:
-                    leftSpeed = Math.min(inclination, 40);
+                    leftSpeed = Math.min(inclination, 400);
                     leftDirection = 1;
                     break;
                 case 2:
-                    rightSpeed = Math.min(inclination, 40);
+                    rightSpeed = Math.min(inclination, 400);
                     rightDirection = 1;
                     break;
                 default:
@@ -49,16 +49,16 @@ public class Calculator {
                     // send message and return
                     return;
                 }
-                inclination = (int) ((float) inclination / 255.0 * (float) speed);
+                inclination = (int) ((float) inclination / 999.0 * (float) speed);
                 switch (turn) {
                     case 1:
                         // Turn right
-                        leftSpeed = Math.min(speed + inclination, 255);
-                        rightSpeed = Math.max(speed - inclination, 40);
+                        leftSpeed = Math.min(speed + inclination, 999);
+                        rightSpeed = Math.max(speed - inclination, 400);
                         break;
                     case 2:
-                        leftSpeed = Math.max(speed - inclination, 40);
-                        rightSpeed = Math.min(speed + inclination, 255);
+                        leftSpeed = Math.max(speed - inclination, 400);
+                        rightSpeed = Math.min(speed + inclination, 999);
                         // Turn left
                         break;
                     default:
@@ -73,16 +73,16 @@ public class Calculator {
                     // send message and return
                     return;
                 }
-                inclination = (int) ((float) inclination / 255.0 * (float) speed);
+                inclination = (int) ((float) inclination / 999.0 * (float) speed);
                 switch (turn) {
                     case 1:
                         // Turn right
-                        leftSpeed = Math.min(speed + inclination, 255);
-                        rightSpeed = Math.max(speed - inclination, 40);
+                        leftSpeed = Math.min(speed + inclination, 999);
+                        rightSpeed = Math.max(speed - inclination, 400);
                         break;
                     case 2:
-                        leftSpeed = Math.max(speed - inclination, 40);
-                        rightSpeed = Math.min(speed + inclination, 255);
+                        leftSpeed = Math.max(speed - inclination, 400);
+                        rightSpeed = Math.min(speed + inclination, 999);
                         // Turn left
                         break;
                     default:
