@@ -12,7 +12,7 @@
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="100dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
@@ -23,8 +23,8 @@
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_weight="10"
+            android:layout_marginTop="50dp"
+            android:layout_weight="1"
             android:indeterminate="false"
             android:max="100"
             android:progress="100"
@@ -32,11 +32,11 @@
 
         <ImageView
             android:id="@+id/wheel"
-            android:layout_width="40dp"
-            android:layout_height="50dp"
+            android:layout_width="10dp"
+            android:layout_height="100dp"
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
-            android:maxHeight="1dp"
+            android:maxHeight="100dp"
             android:src="@drawable/wheel" />
 
         <ProgressBar
@@ -44,67 +44,56 @@
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_weight="10"
+            android:layout_marginTop="50dp"
+            android:layout_weight="1"
             android:indeterminate="false"
             android:max="100"
             android:progress="100" />
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:text="Large Text"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:layout_below="@id/linearLayout"
+        android:id="@+id/linearLayout1">
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:text="Large Text"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignTop="@+id/textView"
-        android:text="Large Text"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        <SeekBar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="10dp"
+            android:layout_marginTop="10dp"
+            android:max="255"
+            android:progress="0"
+            android:indeterminate="false"
+            android:id="@+id/speedSelector" />
+    </LinearLayout>
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:layout_below="@+id/linearLayout"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_above="@+id/textView">
+        android:id="@+id/buttonLayout"
+        android:orientation="horizontal"
+        android:layout_below="@id/linearLayout1">
 
         <ImageView
+            android:id="@+id/brake"
             android:layout_width="50dp"
-            android:layout_height="100dp"
-            android:id="@+id/imageView"
+            android:layout_height="90dp"
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
             android:maxWidth="10dp"
-            android:src="@drawable/brake"/>
+            android:src="@drawable/brake" />
 
         <ImageView
+            android:id="@+id/gas"
             android:layout_width="50dp"
-            android:layout_height="100dp"
-            android:id="@+id/imageView2"
+            android:layout_height="90dp"
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
-            android:src="@drawable/gas"/>
+            android:src="@drawable/gas" />
     </LinearLayout>
 
 </RelativeLayout>

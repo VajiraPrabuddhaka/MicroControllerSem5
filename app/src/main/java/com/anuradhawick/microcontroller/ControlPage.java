@@ -5,20 +5,27 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class ControlPage extends AppCompatActivity implements SensorEventListener {
+import com.anuradhawick.microcontroller.SpeedCalculator.Calculator;
+
+public class ControlPage extends AppCompatActivity implements SensorEventListener, View.OnTouchListener {
     private ProgressBar rightTurn, leftTurn;
-    private ImageView wheel;
+    private ImageView wheel, brake, gas;
     private SensorManager sensorManager;
     private float[] mRotationMatrix = new float[16];
     private float[] orientationVals = new float[4];
-    private TextView tv, tv1, tv2;
+    private SeekBar speedSelector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,19 +35,24 @@ public class ControlPage extends AppCompatActivity implements SensorEventListene
         leftTurn = (ProgressBar) findViewById(R.id.leftTurn);
         wheel = (ImageView) findViewById(R.id.wheel);
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        tv = (TextView) findViewById(R.id.textView);
-        tv1 = (TextView) findViewById(R.id.textView2);
-        tv2 = (TextView) findViewById(R.id.textView3);
+        gas = (ImageView) findViewById(R.id.gas);
+        brake = (ImageView) findViewById(R.id.brake);
+        speedSelector = (SeekBar) findViewById(R.id.speedSelector);
+        gas.setOnTouchListener(this);
+        brake.setOnTouchListener(this);
+
         if (sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR) != null) {
             sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR), sensorManager.SENSOR_DELAY_NORMAL);
             Toast.makeText(this, "Success", Toast.LENGTH_LONG);
         } else {
             Toast.makeText(this, "Failed", Toast.LENGTH_LONG);
         }
+
     }
 
     @Override
     public void onSensorChanged(SensorEvent event) {
+        int leftTurnValue = 0, rightTurnValue = 0;
         // It is good practice to check that we received the proper sensor event
         if (event.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR) {
             // Convert the rotation-vector to a 4x4 matrix.
@@ -53,24 +65,84 @@ public class ControlPage extends AppCompatActivity implements SensorEventListene
             orientationVals[1] = (float) Math.toDegrees(orientationVals[1]);
             orientationVals[2] = (float) Math.toDegrees(orientationVals[2]);
 
-            // value set 1 +90 to -90
-//            System.out.println(orientationVals[0] + " " + orientationVals[1] + " " + orientationVals[2]);
-            tv.setText("" + Math.round(orientationVals[2] / 45 * 100));
             rightTurn.setProgress(-1 * (Math.round(orientationVals[1] / 45 * 100)) - 15);
             leftTurn.setProgress(Math.round(orientationVals[1] / 45 * 100) - 15);
             if (-1 * (Math.round(orientationVals[1] / 45 * 100)) - 15 > 0 || Math.round(orientationVals[1] / 45 * 100) - 15 > 0) {
                 wheel.setRotation(-1 * orientationVals[1] / 45 * 100);
+                leftTurnValue = (Math.round(orientationVals[1] / 45 * 100) - 15);
+                rightTurnValue = ((-1) * (Math.round(orientationVals[1] / 45 * 100)) - 15);
+                if (leftTurnValue > 0) {
+                    leftTurnValue = Math.min(leftTurnValue, 100);
+                    leftTurnValue = (int) ((float) leftTurnValue / 100.0 * (255));
+                    rightTurnValue = 0;
+                    // Turn left
+                    turn = 2;
+                    inclination = leftTurnValue;
+                } else if (rightTurnValue > 0) {
+                    rightTurnValue = Math.min(rightTurnValue, 100);
+                    rightTurnValue = (int) ((float) rightTurnValue / 100.0 * (255));
+                    leftTurnValue = 0;
+                    // Right turn
+                    turn = 1;
+                    inclination = rightTurnValue;
+                }
             } else {
                 wheel.setRotation(0f);
+                inclination = 0;
             }
-            tv1.setText("" + Math.round(orientationVals[0] / 45 * 100));
-            tv2.setText("" + Math.round(orientationVals[1] / 45 * 100));
-
+            HomePage.calculator.updateSpeed(direction, speed, inclination, turn);
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
     }
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
     }
+
+    // Keeping track of the pressed item
+    private static long gasPress = System.currentTimeMillis();
+    private static long brakePress = System.currentTimeMillis();
+    // Speeds
+    private int inclination = 0, direction = 1, speed = 0, turn = 1;
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        if (v.getId() == R.id.gas) {
+            gasPress = System.currentTimeMillis();
+            direction = 1;
+            if (event.getAction() == MotionEvent.ACTION_MOVE) {
+                speed = speedSelector.getProgress();
+            } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                inclination = 0;
+                direction = 1;
+                speed = 0;
+                turn = 1;
+                HomePage.calculator.updateSpeed(direction, speed, inclination, turn);
+            }
+        }
+        if (v.getId() == R.id.brake) {
+            brakePress = System.currentTimeMillis();
+            if (brakePress > gasPress + 100) {
+                direction = 2;
+                if (event.getAction() == MotionEvent.ACTION_MOVE) {
+                    speed = speedSelector.getProgress();
+                } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                    inclination = 0;
+                    direction = 1;
+                    speed = 0;
+                    turn = 1;
+                    HomePage.calculator.updateSpeed(direction, speed, inclination, turn);
+//                    calc.sendData();
+                }
+            }
+        }
+        return true;
+    }
+
+
 }

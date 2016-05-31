@@ -10,27 +10,31 @@
     tools:context="com.anuradhawick.microcontroller.HomePage">
 
     <EditText
+        android:id="@+id/ipAddress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/ipAddress"
-        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="50dp" />
 
     <EditText
+        android:id="@+id/portNumber"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/portNumber"
         android:layout_below="@+id/ipAddress"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:inputType="number" />
 
     <Button
+        android:id="@+id/proceedButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Proceed"
-        android:id="@+id/proceedButton"
+        android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_marginTop="50dp"
+        android:text="Proceed" />
 </RelativeLayout>
